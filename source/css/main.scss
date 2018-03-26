@@ -1,5 +1,26 @@
 @import "https://fonts.googleapis.com/icon?family=Material+Icons";
 @import "https://fonts.googleapis.com/css?family=Francois+One";
+@import "_reset.scss";
+
+$board: #7C7877;
+$gridCover: #ABD0CE;
+$gridBorder: #F0E5DE;
+$sun: #FBFFB9;
+$sunBack: transparent;
+$cake: #C5E99B;
+$cakeBack: transparent;
+$snow: #f1bbba;
+$snowBack: transparent;
+
+//$board: #7C7877;
+//$gridCover: #ABD0CE;
+//$gridBorder: #F0E5DE;
+//$sun: #FBFFB9;
+//$sunBack: #FDD692;
+//$cake: #C5E99B;
+//$cakeBack: #8FBC94;
+//$snow: #f1bbba;
+//$snowBack: #eb9f9f;
 
 
 *{
@@ -22,6 +43,7 @@ h1{
   color: brown;
   text-align: center;
   padding: 2rem 0;
+  font-size: 4rem;
 }
 
 .description{
@@ -39,7 +61,7 @@ h1{
   height: 500px;
   display: flex;
   flex-wrap: wrap;
-  background-color: beige;
+  background-color: $board;
   margin: 0 auto;
   &.gameEnd{
     pointer-events: none;
@@ -47,32 +69,29 @@ h1{
   .grid{
     width: 25%;
     height: 25%;
-    border: 1px solid burlywood;
+    border: 1px solid $gridBorder;
     display: flex;
     align-items: center;
     justify-content: center;
     position: relative;
     cursor: pointer;
     &.treasure{
-      color: gold;
-      background-color: coral;
-      font-size: 4rem;
+      color: $sun;
+      background-color: $sunBack;
     }
     &.heart{
-      color: green;
-      background-color: greenyellow;
-      font-size: 4rem;
+      color: $cake;
+      background-color: $cakeBack;
     }
     &.bomb{
-      color: red;
-      background-color: darkred;
-      font-size: 4rem;
+      color: $snow;
+      background-color: $snowBack;
     }
     [class^="icon"]{
       pointer-events: none;
     }
     .material-icons{
-      font-size: 4rem;
+      font-size: 3.2rem;
     }
     &:before{
       content: "";
@@ -86,7 +105,7 @@ h1{
       bottom: 0;
       margin: auto;
       z-index: 5;
-      background-color: saddlebrown;
+      background-color: $gridCover;
       transform-origin: top center;
       transition: transform .5s;
     }
@@ -135,4 +154,8 @@ h1{
   border-radius: 5px;
   margin: 2rem auto;
   cursor: pointer;
+}
+
+footer{
+  text-align: center;
 }

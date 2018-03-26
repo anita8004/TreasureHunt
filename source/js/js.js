@@ -1,11 +1,10 @@
 /*
-* 炸彈遊戲
+* 尋寶遊戲
 *
 取得 [英文-數字] 的陣列
-設定寶藏，炸彈，愛心的位置
-取得玩家輸入的陣列
-判斷陣列的位置是否符合寶藏，炸彈，愛心的位置，如果是....不是...
-設定玩家有5條血
+設定寶藏(太陽)，炸彈(雪花)，愛心(蛋糕)的位置
+判斷玩家點擊的目標是否是寶藏，炸彈，愛心，如果是....就...
+設定玩家有血量
 找到炸彈，減少1條血
 找到愛心，增加1條血
 找到寶藏，結束遊戲 --> win
@@ -19,33 +18,31 @@
 
 //設置可控制的變數，以便更改遊戲設置
 //假設列為4*4
-var en = {
+const en = {
     0: "a",
     1: "b",
     2: "c",
     3: "d"
 };
-var hp;
-var totalHp = 6; //總血量
-var treasureLeng = 1;
-var heartLeng = 3;
-var bombLeng = 5;
-var arr = [];
-var treasure;
-var heart = [];
-var bomb = [];
-
-
+let hp;
+const totalHp = 6; //總血量
+const treasureLeng = 1;
+const heartLeng = 3;
+const bombLeng = 5;
+let arr = [];
+let treasure;
+let heart = [];
+let bomb = [];
 
 
 //控制項
-var $board = document.getElementsByClassName("chessboard")[0];
-var $resault = document.getElementById("result");
-var $heartGroup = document.getElementById("heartGroup");
-var $hearts = document.getElementsByClassName("hpHeart");
-var $emptyHeart = document.getElementsByClassName("isEmpty");
-var $restart = document.getElementById("restart");
-var $grids = document.getElementsByClassName("grid");
+let $board = document.getElementsByClassName("chessboard")[0];
+let $grids = document.getElementsByClassName("grid");
+let $resault = document.getElementById("result");
+let $heartGroup = document.getElementById("heartGroup");
+let $hearts = document.getElementsByClassName("hpHeart");
+let $emptyHeart = document.getElementsByClassName("isEmpty");
+let $restart = document.getElementById("restart");
 
 
 function init() {
@@ -57,25 +54,24 @@ function init() {
     $resault.innerHTML = "Game Start !!";
     $board.classList.remove("gameEnd");
 
-    for (var q = 0; q < $grids.length; q++) {
+    for (let q = 0; q < $grids.length; q++) {
         $grids[q].classList.remove("open","treasure","heart","bomb");
         $grids[q].innerHTML = "";
     }
 
-
     //準備陣列數字
     function getArray() {
         function getMath() {
-            var letter = Math.round(Math.random()*3);
-            var number = Math.floor((Math.random() * 4) + 1);
+            let letter = Math.round(Math.random()*3);
+            let number = Math.floor((Math.random() * 4) + 1);
             return  en[letter] + "-" + number;
         }
 
-        var same = true;
-        var arrLeng = treasureLeng + heartLeng + bombLeng;
+        let same = true;
+        let arrLeng = treasureLeng + heartLeng + bombLeng;
         while (arr.length < arrLeng) {
-            var str = getMath();
-            for (var n in arr) {
+            let str = getMath();
+            for (let n in arr) {
                 if (str === arr[n]) {
                     same = false;
                 }
@@ -86,7 +82,6 @@ function init() {
 
             same = true;
         }
-        arr = arr;
         //console.log(arr);
     }
 
@@ -100,26 +95,26 @@ function init() {
 
 
 //設定寶藏class
-    var treasureDiv = document.querySelector("#"+treasure);
+    let treasureDiv = document.querySelector("#"+treasure);
     treasureDiv.classList.add("treasure");
-    var treasureIcon = document.createElement("i");
+    let treasureIcon = document.createElement("i");
     treasureIcon.className = "material-icons";
     treasureIcon.innerHTML = "wb_sunny";
     treasureDiv.appendChild(treasureIcon);
 
 //設定血class
-    for (var i=0;i<heart.length;i++){
+    for (let i=0;i<heart.length;i++){
         document.querySelector("#"+heart[i]).classList.add("heart");
-        var heartIcon = document.createElement("i");
+        let heartIcon = document.createElement("i");
         heartIcon.className = "material-icons";
         heartIcon.innerHTML = "cake";
         document.querySelector("#"+heart[i]).appendChild(heartIcon);
     }
 
 //設定炸彈class
-    for (var i = 0; i < bomb.length; i++) {
+    for (let i = 0; i < bomb.length; i++) {
         document.querySelector("#"+bomb[i]).classList.add("bomb");
-        var bombIcon = document.createElement("i");
+        let bombIcon = document.createElement("i");
         bombIcon.className = "material-icons";
         bombIcon.innerHTML = "ac_unit";
         document.querySelector("#"+bomb[i]).appendChild(bombIcon);
@@ -128,16 +123,16 @@ function init() {
 //設定血條
     function createHeart(total, battle) {
         $heartGroup.innerHTML = "";
-        for (var i = 0; i < total; i++) {
-            var div = document.createElement("div");
-            var icon = document.createElement("span");
+        for (let i = 0; i < total; i++) {
+            let div = document.createElement("div");
+            let icon = document.createElement("span");
             div.className = "hpHeart";
             icon.className = "material-icons";
             icon.innerHTML = "cake";
             div.appendChild(icon);
             $heartGroup.appendChild(div);
         }
-        for(var l = battle; l < total; l++) {
+        for(let l = battle; l < total; l++) {
             document.getElementsByClassName("hpHeart")[l].classList.add("isEmpty");
         }
     }
@@ -156,7 +151,7 @@ function hasClass(elem, className) {
 
 //開始遊戲
 $board.addEventListener("click", function (event) {
-    var $target = event.target;
+    let $target = event.target;
     $target.classList.add("open");
     //遊戲結束
     function gameEnd() {

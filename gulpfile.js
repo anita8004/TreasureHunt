@@ -71,8 +71,7 @@ gulp.task('bower', function () {
 });
 gulp.task('vendorJs', ['bower'], function () {
   return gulp.src([
-    './.tmp/vendors/**/**.js',
-    './node_modules/bootstrap/dist/js/bootstrap.bundle.min.js'
+    './.tmp/vendors/**/**.js'
   ])
   .pipe($.order([
     'jquery.js'
@@ -94,8 +93,7 @@ gulp.task('sass', function () {
     .pipe($.plumber())
     .pipe($.sourcemaps.init())
     .pipe($.sass({ 
-      outputStyle: 'expanded',
-      includePaths: ['./node_modules/bootstrap/scss']
+      outputStyle: 'expanded'
     })
       .on('error', $.sass.logError))
     .pipe($.postcss(processors))
