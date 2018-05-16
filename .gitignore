@@ -5,3 +5,4 @@ bower_components
 package-lock.json
 .tmp
 .idea
+yarn.lock

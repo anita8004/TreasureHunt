@@ -75,15 +75,15 @@ h1{
     justify-content: center;
     position: relative;
     cursor: pointer;
-    &.treasure{
+    &.sun{
       color: $sun;
       background-color: $sunBack;
     }
-    &.heart{
+    &.cake{
       color: $cake;
       background-color: $cakeBack;
     }
-    &.bomb{
+    &.snow{
       color: $snow;
       background-color: $snowBack;
     }
