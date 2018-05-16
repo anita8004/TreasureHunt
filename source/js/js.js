@@ -38,7 +38,7 @@ let bomb = [];
 //控制項
 let $board = document.getElementsByClassName("chessboard")[0];
 let $grids = document.getElementsByClassName("grid");
-let $resault = document.getElementById("result");
+let $result = document.getElementById("result");
 let $heartGroup = document.getElementById("heartGroup");
 let $hearts = document.getElementsByClassName("hpHeart");
 let $emptyHeart = document.getElementsByClassName("isEmpty");
@@ -51,7 +51,7 @@ function init() {
     hp = 3;
     arr = [];
     createHeart(totalHp, heart.length);
-    $resault.innerHTML = "Game Start !!";
+    $result.innerHTML = "Game Start !!";
     $board.classList.remove("gameEnd");
 
     for (let q = 0; q < $grids.length; q++) {
@@ -160,7 +160,7 @@ $board.addEventListener("click", function (event) {
 
     //點擊到treasure
     if (hasClass($target, "treasure")) {
-        $resault.innerHTML = "Win !!";
+        $result.innerHTML = "Win !!";
         gameEnd();
     }
     //點擊到heart
@@ -177,7 +177,7 @@ $board.addEventListener("click", function (event) {
             hp --
         }
         if (hp === 0) {
-            $resault.innerHTML = "Game over !!";
+            $result.innerHTML = "Game over !!";
             gameEnd();
         }
     }
