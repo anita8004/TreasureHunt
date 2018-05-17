@@ -8,6 +8,7 @@ const en = {
 }
 let hp
 const totalHp = 6 // 總血量
+let arr = []
 
 // 控制項
 
@@ -15,32 +16,50 @@ const $board = document.querySelector('.chessboard')
 // const $grids = document.querySelectorAll('.grid')
 const $resault = document.querySelector('#result')
 const $heartGroup = document.querySelector('#heartGroup')
-const $hearts = document.querySelectorAll('.hpHeart')
-const $emptyHeart = document.querySelectorAll('.isEmpty')
+// const $hearts = document.querySelectorAll('.hpHeart')
+// const $emptyHeart = document.querySelectorAll('.isEmpty')
 const $restart = document.querySelector('#restart')
 
-// 創建血條
+// #region 創建血條
 
-let createHeart = () => {
-  let i = 0
-  while (i < totalHp) {
-    let div = document.createElement('div')
-    div.classList.add('hpHeart')
-    if (i >= 3) div.classList.add('isEmpty')
-    div.innerHTML = '<span class="material-icons">cake</span>'
-    $heartGroup.appendChild(div)
-    i++
+class LifeCake {
+  constructor (hp = 3, totalHp = 6) {
+    this.hp = hp
+    this.totalHp = totalHp
+  }
+  createHeart () {
+    $heartGroup.innerHTML = ''
+    let i = 0
+    while (i < totalHp) {
+      let div = document.createElement('div')
+      div.classList.add('hpHeart')
+      if (i >= 3) div.classList.add('isEmpty')
+      div.innerHTML = '<span class="material-icons">cake</span>'
+      $heartGroup.appendChild(div)
+      i++
+    }
   }
 }
 
-// 創建太陽、冰雪、蛋糕棋子
+let hpChange = (hp) => {
+  let $hearts = document.querySelectorAll('.hpHeart')
+  $hearts.forEach(e => {
+    e.classList.remove('isEmpty')
+  })
+  for (let i = hp; i < totalHp; i++) {
+    $hearts[i].classList.add('isEmpty')
+  }
+}
+
+// #endregion
+
+// #region 創建太陽、冰雪、蛋糕棋子
 
 class Chess {
   constructor (sun = 1, cake = 3, snow = 5) {
     this.sunLeng = sun
     this.cakeLeng = cake
     this.snowLeng = snow
-    this.arr = []
   }
   getMath () {
     let letter = Math.round(Math.random() * 3)
@@ -50,7 +69,6 @@ class Chess {
   setLocation () {
     let arrLeng = this.sunLeng + this.cakeLeng + this.snowLeng
     let isdiff = true
-    let arr = this.arr
     while (arr.length < arrLeng) {
       let str = this.getMath()
       for (let n in arr) {
@@ -81,15 +99,20 @@ class Chess {
   }
 }
 
+// #endregion
+
 /* 初始化 */
 
 let init = () => {
   hp = 3
-  // arr = []
-  createHeart()
+  let lifecake = new LifeCake()
+  lifecake.createHeart()
+  // lifecake.hpChange(hp)
+
   $resault.innerHTML = 'Game Start !!'
   $board.classList.remove('gameEnd')
 
+  arr = []
   let chess = new Chess()
   let chessLoc = chess.setLocation()
 
@@ -109,41 +132,60 @@ let init = () => {
 init()
 
 // 判斷是否含有class
-function hasClass (elem, className) {
-  return new RegExp(' ' + className + ' ').test(' ' + elem.className + ' ')
+let hasClass = (element, className) => {
+  // console.log(element.classList.contains(className))
+  return element.classList.contains(className)
+}
+
+let playing = {
+  gridOpen (ele) {
+    ele.classList.add('open')
+  },
+  clickChess (chess) {
+    switch (chess) {
+      case 'sun':
+        $resault.innerHTML = 'Game win !!'
+        $board.classList.add('gameEnd')
+        break
+      case 'cake':
+        if (hp < totalHp) {
+          hp++
+          hpChange(hp)
+          console.log(hp)
+        }
+        break
+      case 'snow':
+        if (hp > 0) {
+          hp--
+          hpChange(hp)
+          console.log(hp)
+        }
+        break
+      default:
+        console.log('什麼都沒有')
+    }
+  },
+  lose () {
+    $resault.innerHTML = 'Game over !!'
+    $board.classList.add('gameEnd')
+  }
 }
 
 // 開始遊戲
-$board.addEventListener('click', function (event) {
-  let $target = event.target
-  $target.classList.add('open')
-  // 遊戲結束
-  function gameEnd () {
-    $board.classList.add('gameEnd')
+$board.addEventListener('click', (e) => {
+  let target = e.target
+  playing.gridOpen(target)
+  if (hasClass(target, 'sun')) {
+    playing.clickChess('sun')
   }
-
-  // 點擊到treasure
-  if (hasClass($target, 'sun')) {
-    $resault.innerHTML = 'Win !!'
-    gameEnd()
+  if (hasClass(target, 'cake')) {
+    playing.clickChess('cake')
   }
-  // 點擊到heart
-  if (hasClass($target, 'cake')) {
-    if (hp < totalHp && hasClass($emptyHeart[0], 'isEmpty')) {
-      $emptyHeart[0].classList.remove('isEmpty')
-      hp++
-    }
+  if (hasClass(target, 'snow')) {
+    playing.clickChess('snow')
   }
-  // 點擊到bomb
-  if (hasClass($target, 'snow')) {
-    $hearts[$hearts.length - $emptyHeart.length - 1].classList.add('isEmpty')
-    if (hp > 0 && hp <= totalHp) {
-      hp--
-    }
-    if (hp === 0) {
-      $resault.innerHTML = 'Game over !!'
-      gameEnd()
-    }
+  if (hp === 0) {
+    playing.lose()
   }
 })
 
