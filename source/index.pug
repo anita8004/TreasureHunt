@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+html(lang="en")
+  head
+    meta(charset="UTF-8")
+    meta(name="viewport", content="width=device-width, initial-scale=1.0")
+    meta(http-equiv="X-UA-Compatible", content="ie=edge")
+    title Treasure Hunt
+    link(rel="stylesheet", href="./css/main.css")
+  body
+    .wrapper
+      header
+        h1 Treasure Hunt
+      main
+        p.description 點擊並開啟格子，找到雪花扣1血，找到蛋糕加1血，蛋糕為0時Game over，找到太陽直接贏局
+        .game-wrapper
+          #heartGroup
+          #result Game Start !!
+          .chessboard
+            .grid#a-1
+            .grid#b-1
+            .grid#c-1
+            .grid#d-1
+            .grid#a-2
+            .grid#b-2
+            .grid#c-2
+            .grid#d-2
+            .grid#a-3
+            .grid#b-3
+            .grid#c-3
+            .grid#d-3
+            .grid#a-4
+            .grid#b-4
+            .grid#c-4
+            .grid#d-4
+          button#restart(type="button") RESTART
+      footer
+        p.copyright game by yunhsiuLi 2018.03.19
+    // script(src="./js/vendor.js")
+    script(src="./js/all.js")
