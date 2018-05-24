@@ -198,6 +198,4 @@ $board.addEventListener('click', (e) => {
 
 // 重新開始
 
-$restart.addEventListener('click', function () {
-  init()
-})
+$restart.addEventListener('click', init())
