@@ -15,8 +15,6 @@ const $board = document.querySelector('.chessboard')
 const $grids = document.querySelectorAll('.grid')
 const $resault = document.querySelector('#result')
 const $heartGroup = document.querySelector('#heartGroup')
-// const $hearts = document.querySelectorAll('.hpHeart')
-// const $emptyHeart = document.querySelectorAll('.isEmpty')
 const $restart = document.querySelector('#restart')
 
 // #region 創建血條
