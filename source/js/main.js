@@ -81,14 +81,11 @@ class Chess {
     }
     return thisArr
   }
-  getLocation (array = [], index = []) {
-    let arr = array
+  getLocation (index = [0], array = this.setLocation()) {
     let location = []
-
     for (let i = 0; i < index.length; i++) {
-      location.push(arr[index[i]])
+      location.push(array[index[i]])
     }
-
     return location
   }
   buildChess (name, location, iconName) {
@@ -131,14 +128,12 @@ let playing = {
         if (hp < totalHp) {
           hp++
           hpChange(hp)
-          console.log(hp)
         }
         break
       case 'snow':
         if (hp > 0) {
           hp--
           hpChange(hp)
-          console.log(hp)
         }
         break
       default:
@@ -171,14 +166,14 @@ let init = () => {
   $board.classList.remove('gameEnd')
 
   let chess = new Chess()
-  let chessLoc = chess.setLocation()
-  let sunLoc = chess.getLocation(chessLoc, [0])
-  let cakeLoc = chess.getLocation(chessLoc, [1, 2, 3])
-  let snowLoc = chess.getLocation(chessLoc, [4, 5, 6, 7, 8])
+  let sunLoc = chess.getLocation()
+  let cakeLoc = chess.getLocation([1, 2, 3])
+  let snowLoc = chess.getLocation([4, 5, 6, 7, 8])
 
   chess.buildChess('sun', sunLoc, 'wb_sunny')
   chess.buildChess('cake', cakeLoc, 'cake')
   chess.buildChess('snow', snowLoc, 'ac_unit')
+  // console.log(sunLoc, cakeLoc, snowLoc)
 }
 
 init()
