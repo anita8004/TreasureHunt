@@ -8,12 +8,11 @@ const en = {
 }
 let hp
 const totalHp = 6 // 總血量
-let arr = []
 
 // 控制項
 
 const $board = document.querySelector('.chessboard')
-// const $grids = document.querySelectorAll('.grid')
+const $grids = document.querySelectorAll('.grid')
 const $resault = document.querySelector('#result')
 const $heartGroup = document.querySelector('#heartGroup')
 // const $hearts = document.querySelectorAll('.hpHeart')
@@ -27,7 +26,7 @@ class LifeCake {
     this.hp = hp
     this.totalHp = totalHp
   }
-  createHeart () {
+  createHeart (ele) {
     $heartGroup.innerHTML = ''
     let i = 0
     while (i < totalHp) {
@@ -56,7 +55,8 @@ let hpChange = (hp) => {
 // #region 創建太陽、冰雪、蛋糕棋子
 
 class Chess {
-  constructor (sun = 1, cake = 3, snow = 5) {
+  constructor (sun = 1, cake = 3, snow = 5, arr = []) {
+    this.arr = arr
     this.sunLeng = sun
     this.cakeLeng = cake
     this.snowLeng = snow
@@ -66,25 +66,31 @@ class Chess {
     let number = Math.floor((Math.random() * 4) + 1)
     return `#${en[letter]}-${number}`
   }
+  clearArr () {
+    this.arr = []
+  }
   setLocation () {
     let arrLeng = this.sunLeng + this.cakeLeng + this.snowLeng
+    let thisArr = this.arr
     let isdiff = true
-    while (arr.length < arrLeng) {
+    while (thisArr.length < arrLeng) {
       let str = this.getMath()
-      for (let n in arr) {
-        if (str === arr[n]) isdiff = false
+      for (let n in thisArr) {
+        if (str === thisArr[n]) isdiff = false
       }
-      if (isdiff) arr.push(str)
+      if (isdiff) thisArr.push(str)
       isdiff = true
     }
-    return arr
+    return thisArr
   }
-  getLocation (array, ...index) {
+  getLocation (array = [], index = []) {
     let arr = array
     let location = []
+
     for (let i = 0; i < index.length; i++) {
       location.push(arr[index[i]])
     }
+
     return location
   }
   buildChess (name, location, iconName) {
@@ -101,45 +107,21 @@ class Chess {
 
 // #endregion
 
-/* 初始化 */
-
-let init = () => {
-  hp = 3
-  let lifecake = new LifeCake()
-  lifecake.createHeart()
-  // lifecake.hpChange(hp)
-
-  $resault.innerHTML = 'Game Start !!'
-  $board.classList.remove('gameEnd')
-
-  arr = []
-  let chess = new Chess()
-  let chessLoc = chess.setLocation()
-
-  let sun = new Chess()
-  let sunLoc = sun.getLocation(chessLoc, 0)
-  sun.buildChess('sun', sunLoc, 'wb_sunny')
-
-  let cake = new Chess()
-  let cakeLoc = cake.getLocation(chessLoc, 1, 2, 3)
-  cake.buildChess('cake', cakeLoc, 'cake')
-
-  let snow = new Chess()
-  let snowLoc = snow.getLocation(chessLoc, 4, 5, 6, 7, 8)
-  snow.buildChess('snow', snowLoc, 'ac_unit')
-}
-
-init()
+// #region
 
 // 判斷是否含有class
 let hasClass = (element, className) => {
-  // console.log(element.classList.contains(className))
   return element.classList.contains(className)
 }
+
+// 判斷遊戲動作與狀態
 
 let playing = {
   gridOpen (ele) {
     ele.classList.add('open')
+  },
+  gridClose (ele) {
+    ele.classList.remove('open')
   },
   clickChess (chess) {
     switch (chess) {
@@ -170,6 +152,38 @@ let playing = {
     $board.classList.add('gameEnd')
   }
 }
+
+// #endregion
+
+/* 初始化 */
+
+let init = () => {
+  hp = 3
+  $grids.forEach((ele) => {
+    playing.gridClose(ele)
+    ele.innerHTML = ''
+    ele.classList.remove('sun')
+    ele.classList.remove('cake')
+    ele.classList.remove('snow')
+  })
+  let lifecake = new LifeCake()
+  lifecake.createHeart()
+
+  $resault.innerHTML = 'Game Start !!'
+  $board.classList.remove('gameEnd')
+
+  let chess = new Chess()
+  let chessLoc = chess.setLocation()
+  let sunLoc = chess.getLocation(chessLoc, [0])
+  let cakeLoc = chess.getLocation(chessLoc, [1, 2, 3])
+  let snowLoc = chess.getLocation(chessLoc, [4, 5, 6, 7, 8])
+
+  chess.buildChess('sun', sunLoc, 'wb_sunny')
+  chess.buildChess('cake', cakeLoc, 'cake')
+  chess.buildChess('snow', snowLoc, 'ac_unit')
+}
+
+init()
 
 // 開始遊戲
 $board.addEventListener('click', (e) => {
